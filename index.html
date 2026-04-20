@@ -11,28 +11,12 @@
         body { font-family: 'Noto Sans Arabic', sans-serif; }
         .pdf-page { width: 800px; min-height: 1120px; padding: 60px; background: white; margin: 0 auto; position: relative; }
         @media print { .no-print { display: none; } }
-        
-        /* EDIT STAMP LOOK HERE */
         .official-stamp {
-            border: 5px double #1e40af; /* Stamp Color & Border */
-            border-radius: 50%; 
-            color: #1e40af; /* Text Color */
-            width: 115px; 
-            height: 115px;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-            font-weight: 900; 
-            opacity: 0.5; 
-            transform: rotate(-15deg); /* Stamp Tilt */
-            position: absolute; 
-            z-index: 50; 
-            background: rgba(255, 255, 255, 0.8); 
-            pointer-events: none;
-            /* EXACT LOCATION NEXT TO TOTAL BOX */
-            top: -20px; 
-            right: 280px; 
+            border: 5px double #1e40af; border-radius: 50%; color: #1e40af; width: 115px; height: 115px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 900; opacity: 0.5; transform: rotate(-15deg); 
+            position: absolute; z-index: 50; background: rgba(255, 255, 255, 0.8); pointer-events: none;
+            top: -20px; right: 280px; 
         }
         .en-mode { direction: ltr !important; text-align: left !important; }
         .en-mode .official-stamp { right: auto; left: 280px; }
@@ -50,7 +34,13 @@
                 </div>
                 <input type="text" id="in_name" oninput="update()" placeholder="Client Name" class="w-full border p-3 rounded-xl outline-none">
                 <input type="text" id="in_car" oninput="update()" placeholder="Car Model & Year" class="w-full border p-3 rounded-xl outline-none">
-                <input type="text" id="in_iban" oninput="update()" placeholder="Enter IBAN Manually" class="w-full border p-3 rounded-xl outline-none text-left">
+                
+                <div class="relative">
+                    <span class="absolute left-3 top-3 font-bold text-slate-400">SA</span>
+                    <input type="text" id="in_iban" oninput="validateIBAN(this)" placeholder="22 Digits Only" class="w-full border p-3 pl-10 rounded-xl outline-none font-mono">
+                </div>
+
+                <input type="text" id="in_pay_link" oninput="update()" placeholder="Payment Link (Optional)" class="w-full border p-3 rounded-xl outline-none text-blue-600 underline">
                 
                 <div id="items_inputs" class="space-y-4 mt-4">
                     <div class="p-4 border rounded-2xl bg-slate-50 space-y-2 item-row">
@@ -62,7 +52,7 @@
                         <textarea placeholder="Condition notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>
                     </div>
                 </div>
-                <button onclick="addRow()" class="w-full py-2 text-blue-600 font-bold border-2 border-dashed border-blue-100 rounded-xl">+ Add Another Part</button>
+                <button onclick="addRow()" class="w-full py-2 text-blue-600 font-bold border-2 border-dashed border-blue-100 rounded-xl">+ Add Item</button>
                 <input type="file" id="in_images" multiple accept="image/*" onchange="previewImages(event)" class="w-full text-xs mt-4">
                 <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">Generate PDF ✅</button>
             </div>
@@ -70,13 +60,16 @@
 
         <div id="quote-content" class="pdf-page shadow-2xl flex flex-col">
             <div class="flex justify-between items-start border-b-8 border-slate-900 pb-10 mb-10">
-                <img src="https://i.imgur.com/8QpYI0m.png" alt="Auto Mandoub Logo" class="h-44 object-contain">
-                <div class="text-left text-[11px] font-bold text-slate-400 space-y-1 pt-6">
+                <div class="text-left text-[11px] font-bold text-slate-400 space-y-1 pt-24">
                     <p><span id="lbl_g">التاريخ ميلادي</span>: <span id="date_g"></span></p>
                     <p><span id="lbl_h">التاريخ هجري</span>: <span id="date_h"></span></p>
                     <p class="text-slate-500 font-mono">CR: 1010123456 | VAT: 300123456780003</p>
                     <p class="font-mono">Ma'aroof: 123456</p>
-                    <p class="text-red-500 font-black italic" id="lbl_val">صلاحية العرض: 60 دقيقة فقط</p>
+                    <p class="text-red-600 font-black italic" id="lbl_val">صلاحية العرض: 60 دقيقة فقط</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <img src="https://i.postimg.cc/2S9CzX5H/image.png" alt="Auto Mandoub" class="h-44 object-contain">
+                    <p class="text-xl font-black text-slate-800 mt-2 italic uppercase" id="lbl_quote_title">عرض سعر</p>
                 </div>
             </div>
 
@@ -112,14 +105,14 @@
                 <div class="flex justify-end mt-12 relative">
                     <div class="official-stamp">
                         <span class="text-[8px]">AUTO MANDOUB</span>
-                        <span class="text-[12px] font-black" id="lbl_stamp_ar">أوتو مندوب</span>
-                        <span class="text-[14px]" id="lbl_stamp_ok">موافق</span>
+                        <span class="text-[12px] font-black">أوتو مندوب</span>
+                        <span class="text-[14px]">موافق</span>
                         <span class="text-[8px]">APPROVED</span>
                     </div>
 
                     <div class="w-72 space-y-3 bg-slate-50 p-6 rounded-3xl border border-slate-100 text-[11px] font-bold text-slate-500">
-                        <div class="flex justify-between"><span id="lbl_subtotal">المجموع الفرعي:</span><span id="sub_total" class="font-mono">0.00</span></div>
-                        <div class="flex justify-between border-b pb-2"><span id="lbl_vat">الضريبة (15%):</span><span id="vat_amount" class="font-mono">0.00</span></div>
+                        <div class="flex justify-between"><span>Subtotal:</span><span id="sub_total" class="font-mono">0.00</span></div>
+                        <div class="flex justify-between border-b pb-2"><span>VAT (15%):</span><span id="vat_amount" class="font-mono">0.00</span></div>
                         <div class="flex justify-between text-2xl font-black text-blue-700 pt-1">
                             <span id="lbl_final">الإجمالي:</span>
                             <span><span id="total_all_final" class="font-mono">0.00</span> <span class="text-xs">SAR</span></span>
@@ -130,11 +123,16 @@
 
             <div class="grid grid-cols-2 gap-8 mt-auto pt-8 border-t-4 border-slate-100">
                 <div class="bg-blue-50 p-5 rounded-3xl border border-blue-100 text-[10px]">
-                    <h4 class="font-black mb-3 underline" id="lbl_pay_title">تعليمات السداد والشحن:</h4>
-                    <p class="font-bold text-blue-900 text-xs mb-3 font-mono">IBAN: <span id="out_iban">........</span></p>
-                    <p class="text-red-600 font-black italic leading-relaxed" id="lbl_ship_note">* تكلفة الشحن عند الاستلام | ارسل صورة التحويل فوراً لتعميد الشراء.</p>
+                    <h4 class="font-black mb-2 underline" id="lbl_pay_title">Payment & Shipping:</h4>
+                    <p class="font-bold text-blue-900 text-[11px] mb-1"><span id="out_bank">Bank Name</span></p>
+                    <p class="text-blue-800 font-mono mb-2">IBAN: <span id="out_iban">SA........</span></p>
+                    <div id="pay_link_section" class="hidden border-t pt-2 mt-1">
+                        <p class="font-bold mb-1">Pay with Apple Pay / Mada:</p>
+                        <a href="#" id="out_pay_link" class="text-blue-600 underline font-bold break-all">Click here to pay online</a>
+                    </div>
+                    <p class="text-red-600 font-black italic mt-3" id="lbl_ship_note">* Shipping at delivery | Send transfer screenshot.</p>
                 </div>
-                <div class="bg-slate-900 text-white p-5 rounded-3xl text-[9px] leading-relaxed">
+                <div class="bg-slate-900 text-white p-5 rounded-3xl text-[9px] leading-relaxed shadow-lg">
                     <h4 class="font-black mb-3 text-blue-400 uppercase" id="lbl_terms_title">General Terms:</h4>
                     <ul id="terms_list" class="space-y-1 list-disc pr-4 text-slate-300"></ul>
                 </div>
@@ -143,33 +141,16 @@
     </div>
 
     <script>
+        const bankCodes = { "80": "Al Rajhi Bank (مصرف الراجحي)", "05": "Alinma Bank (مصرف الإنماء)", "10": "SNB (AlAhli) (البنك الأهلي)", "15": "Bank AlBilad (بنك البلاد)", "20": "Riyad Bank (بنك الرياض)", "45": "SAB (Saudi Awwal) (بنك الأول)", "55": "Banque Saudi Fransi (البنك الفرنسي)", "40": "Arab National Bank (البنك العربي)" };
+
+        function validateIBAN(input) {
+            input.value = input.value.replace(/\D/g, '').substring(0, 22);
+            update();
+        }
+
         const translations = {
-            ar: {
-                g: "التاريخ ميلادي", h: "التاريخ هجري", val: "صلاحية العرض: 60 دقيقة فقط",
-                client: "العميل المحترم:", car: "السيارة والموديل:", results: "نتائج المعاينة الميدانية (حالة القطعة الراهنة):",
-                th_part: "القطعة", th_qty: "الكمية", th_price: "السعر قبل الضريبة", th_total: "الإجمالي", subtotal: "المجموع الفرعي:",
-                vat: "الضريبة (15%):", final: "الإجمالي النهائي:", pay_title: "تعليمات السداد والشحن:",
-                ship_note: "* تكلفة الشحن عند الاستلام | ارسل صورة التحويل لتعميد الشراء.", terms_title: "الشروط والأحكام:",
-                terms: [
-                    "البيع يتم على حالة القطعة الراهنة وقت الفحص بصرياً.",
-                    "لا يوجد ضمان أو إرجاع على أي قطع مستعملة نهائياً.",
-                    "التحويل البنكي يعتبر موافقة نهائية من العميل على المعاينة.",
-                    "بمجرد الشراء والشحن، تعتبر العملية منتهية وغير قابلة للاسترداد."
-                ]
-            },
-            en: {
-                g: "G Date", h: "H Date", val: "Validity: 60 Minutes Only",
-                client: "Dear Valued Client:", car: "Vehicle Details:", results: "Inspection Results (Visual Status):",
-                th_part: "Part Description", th_qty: "QTY", th_price: "Price (Excl. VAT)", th_total: "Total", subtotal: "Sub-total:",
-                vat: "VAT (15%):", final: "Grand Total:", pay_title: "Payment & Shipping:",
-                ship_note: "* Shipping cost paid at delivery | Send transfer screenshot to proceed.", terms_title: "General Terms:",
-                terms: [
-                    "Parts sold as-is based on visual status at time of check.",
-                    "No warranty or returns on used parts (strictly final).",
-                    "Bank transfer implies final approval of inspection photos.",
-                    "Transactions are final once the part is purchased and shipped."
-                ]
-            }
+            ar: { quote_title: "عرض سعر", g: "التاريخ ميلادي", h: "التاريخ هجري", val: "صلاحية العرض: 60 دقيقة فقط", client: "العميل المحترم:", car: "السيارة والموديل:", results: "نتائج المعاينة الميدانية (حالة القطعة الراهنة):", th_part: "القطعة", th_qty: "الكمية", th_price: "السعر قبل الضريبة", th_total: "الإجمالي", final: "الإجمالي النهائي:", pay_title: "تعليمات السداد والشحن:", ship_note: "* تكلفة الشحن عند الاستلام | ارسل صورة التحويل لتعميد الشراء.", terms_title: "الشروط والأحكام:", terms: ["البيع يتم على حالة القطعة الراهنة وقت الفحص بصرياً.", "لا يوجد ضمان أو إرجاع على أي قطع مستعملة نهائياً.", "التحويل البنكي يعتبر موافقة نهائية من العميل على المعاينة.", "بمجرد الشراء والشحن، تعتبر العملية منتهية وغير قابلة للاسترداد."] },
+            en: { quote_title: "Price Quote", g: "G Date", h: "H Date", val: "Validity: 60 Minutes Only", client: "Dear Valued Client:", car: "Vehicle Details:", results: "Inspection Results (Visual Status):", th_part: "Part Description", th_qty: "QTY", th_price: "Price (Excl. VAT)", th_total: "Total", final: "Grand Total:", pay_title: "Payment & Shipping:", ship_note: "* Shipping cost paid at delivery | Send transfer screenshot to proceed.", terms_title: "General Terms:", terms: ["Parts sold as-is based on visual status at time of check.", "No warranty or returns on used parts (strictly final).", "Bank transfer implies final approval of inspection photos.", "Transactions are final once the part is purchased and shipped."] }
         };
 
         let currentLang = 'ar';
@@ -179,6 +160,7 @@
             lang === 'en' ? container.classList.add('en-mode') : container.classList.remove('en-mode');
             container.dir = lang === 'ar' ? 'rtl' : 'ltr';
             const t = translations[lang];
+            document.getElementById('lbl_quote_title').innerText = t.quote_title;
             document.getElementById('lbl_g').innerText = t.g;
             document.getElementById('lbl_h').innerText = t.h;
             document.getElementById('lbl_val').innerText = t.val;
@@ -189,8 +171,6 @@
             document.getElementById('lbl_th_qty').innerText = t.th_qty;
             document.getElementById('lbl_th_price').innerText = t.th_price;
             document.getElementById('lbl_th_total').innerText = t.th_total;
-            document.getElementById('lbl_subtotal').innerText = t.subtotal;
-            document.getElementById('lbl_vat').innerText = t.vat;
             document.getElementById('lbl_final').innerText = t.final;
             document.getElementById('lbl_pay_title').innerText = t.pay_title;
             document.getElementById('lbl_ship_note').innerText = t.ship_note;
@@ -202,7 +182,17 @@
         function update() {
             document.getElementById('out_name').innerText = document.getElementById('in_name').value || '........';
             document.getElementById('out_car').innerText = document.getElementById('in_car').value || '........';
-            document.getElementById('out_iban').innerText = document.getElementById('in_iban').value || '........';
+            
+            const ibanVal = document.getElementById('in_iban').value;
+            document.getElementById('out_iban').innerText = ibanVal ? "SA" + ibanVal : "SA........";
+            const code = ibanVal.substring(2, 4);
+            document.getElementById('out_bank').innerText = bankCodes[code] || "Commercial Bank";
+
+            const payLink = document.getElementById('in_pay_link').value;
+            const paySec = document.getElementById('pay_link_section');
+            if(payLink) { paySec.classList.remove('hidden'); document.getElementById('out_pay_link').href = payLink; } 
+            else { paySec.classList.add('hidden'); }
+
             const rows = document.querySelectorAll('.item-row');
             let tableHTML = ''; let subtotal = 0;
             rows.forEach(row => {
@@ -224,7 +214,7 @@
         function addRow() {
             const div = document.createElement('div');
             div.className = "p-4 border rounded-2xl bg-slate-50 space-y-2 item-row";
-            div.innerHTML = `<input type="text" placeholder="Part Name" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()"><div class="flex gap-2"><input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()"><input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()"></div><textarea placeholder="Condition notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>`;
+            div.innerHTML = `<input type="text" placeholder="Part Name" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()"><div class="flex gap-2"><input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()"><input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()"></div><textarea placeholder="Notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>`;
             document.getElementById('items_inputs').appendChild(div);
         }
 
@@ -241,8 +231,7 @@
         function downloadPDF() {
             const element = document.getElementById('quote-content');
             const name = document.getElementById('in_name').value || 'Quote';
-            const opt = { margin: 0, filename: `AutoMandoub_${name}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } };
-            html2pdf().set(opt).from(element).save();
+            html2pdf().set({ margin: 0, filename: `AutoMandoub_${name}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }).from(element).save();
         }
 
         const optG = { year: 'numeric', month: 'long', day: 'numeric' };
