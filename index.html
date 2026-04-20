@@ -1,133 +1,126 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2867
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww28600\viewh16040\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Mandoub - Quote Gen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
+        body { font-family: 'Noto Sans Arabic', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 lg:p-10 p-2 text-right">
 
-\f0\fs24 \cf0 <!DOCTYPE html>\
-<html lang="ar" dir="rtl">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>Auto Mandoub - Quote Gen</title>\
-    <script src="https://cdn.tailwindcss.com"></script>\
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>\
-    <style>\
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');\
-        body \{ font-family: 'Noto Sans Arabic', sans-serif; \}\
-    </style>\
-</head>\
-<body class="bg-slate-900 lg:p-10 p-2">\
-\
-    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row gap-6">\
-        \
-        <div class="lg:w-1/3 bg-white p-6 rounded-2xl shadow-2xl">\
-            <h2 class="text-xl font-black mb-4 text-slate-800">\uc0\u1576 \u1610 \u1575 \u1606 \u1575 \u1578  \u1575 \u1604 \u1593 \u1585 \u1590 </h2>\
-            \
-            <div class="space-y-3">\
-                <input type="text" id="in_name" oninput="update()" placeholder="\uc0\u1575 \u1587 \u1605  \u1575 \u1604 \u1593 \u1605 \u1610 \u1604 " class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none">\
-                <input type="text" id="in_car" oninput="update()" placeholder="\uc0\u1575 \u1604 \u1587 \u1610 \u1575 \u1585 \u1577  (\u1605 \u1579 \u1575 \u1604 : \u1603 \u1575 \u1605 \u1585 \u1610  2022)" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none">\
-                <input type="text" id="in_part" oninput="update()" placeholder="\uc0\u1575 \u1604 \u1602 \u1591 \u1593 \u1577  \u1575 \u1604 \u1605 \u1591 \u1604 \u1608 \u1576 \u1577 " class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none">\
-                <input type="number" id="in_price" oninput="update()" placeholder="\uc0\u1575 \u1604 \u1587 \u1593 \u1585  \u1575 \u1604 \u1573 \u1580 \u1605 \u1575 \u1604 \u1610  (SAR)" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none">\
-                \
-                <div class="p-3 bg-blue-50 rounded-xl">\
-                    <label class="block text-xs font-bold text-blue-600 mb-2 text-right">\uc0\u1589 \u1608 \u1585  \u1575 \u1604 \u1601 \u1581 \u1589  \u1575 \u1604 \u1605 \u1610 \u1583 \u1575 \u1606 \u1610 </label>\
-                    <input type="file" id="in_images" multiple accept="image/*" onchange="previewImages(event)" class="w-full text-xs">\
-                </div>\
-                \
-                <button onclick="downloadPDF()" class="w-full bg-green-600 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-green-700 active:scale-95 transition">\
-                    \uc0\u1578 \u1581 \u1605 \u1610 \u1604  \u1575 \u1604 \u1593 \u1585 \u1590  \u1608 \u1575 \u1585 \u1587 \u1575 \u1604 \u1607  \u9989 \
-                </button>\
-            </div>\
-        </div>\
-\
-        <div id="quote-content" class="lg:w-2/3 bg-white p-8 shadow-2xl relative overflow-hidden">\
-            <div class="flex justify-between items-center border-b-8 border-slate-900 pb-6 mb-8">\
-                <div>\
-                    <h1 class="text-3xl font-[900] text-slate-900 tracking-tighter">AUTO MANDOUB</h1>\
-                    <p class="text-sm font-bold text-blue-600">\uc0\u1571 \u1608 \u1578 \u1608  \u1605 \u1606 \u1583 \u1608 \u1576  \u1604 \u1582 \u1583 \u1605 \u1575 \u1578  \u1601 \u1581 \u1589  \u1608 \u1578 \u1571 \u1605 \u1610 \u1606  \u1602 \u1591 \u1593  \u1575 \u1604 \u1594 \u1610 \u1575 \u1585 </p>\
-                </div>\
-                <div class="text-left text-xs font-bold text-slate-400">\
-                    <p>\uc0\u1575 \u1604 \u1578 \u1575 \u1585 \u1610 \u1582 : <span id="out_date"></span></p>\
-                    <p class="text-red-500">\uc0\u1589 \u1604 \u1575 \u1581 \u1610 \u1577  \u1575 \u1604 \u1593 \u1585 \u1590 : 60 \u1583 \u1602 \u1610 \u1602 \u1577 </p>\
-                </div>\
-            </div>\
-\
-            <div class="grid grid-cols-2 gap-4 mb-8">\
-                <div class="border-r-4 border-slate-100 pr-4">\
-                    <span class="text-[10px] text-slate-400 font-bold block">\uc0\u1575 \u1604 \u1593 \u1605 \u1610 \u1604 </span>\
-                    <p class="font-bold text-slate-800" id="out_name">........</p>\
-                    <span class="text-[10px] text-slate-400 font-bold block mt-2">\uc0\u1575 \u1604 \u1587 \u1610 \u1575 \u1585 \u1577 </span>\
-                    <p class="font-bold text-slate-800" id="out_car">........</p>\
-                </div>\
-                <div class="bg-slate-900 p-4 rounded-xl text-white">\
-                    <span class="text-[10px] text-slate-400 font-bold block">\uc0\u1575 \u1604 \u1605 \u1576 \u1604 \u1594  \u1575 \u1604 \u1605 \u1591 \u1604 \u1608 \u1576 </span>\
-                    <p class="text-2xl font-black"><span id="out_price">0</span> <span class="text-xs">SAR</span></p>\
-                    <p class="text-[10px] mt-1 text-slate-300">\uc0\u1575 \u1604 \u1602 \u1591 \u1593 \u1577 : <span id="out_part">........</span></p>\
-                </div>\
-            </div>\
-\
-            <div class="mb-8">\
-                <h3 class="text-sm font-black mb-4 flex items-center gap-2 text-slate-800">\
-                    <span class="w-2 h-2 bg-blue-600 rounded-full"></span>\
-                    \uc0\u1606 \u1578 \u1575 \u1574 \u1580  \u1575 \u1604 \u1605 \u1593 \u1575 \u1610 \u1606 \u1577  \u1608 \u1575 \u1604 \u1601 \u1581 \u1589  \u1575 \u1604 \u1605 \u1610 \u1583 \u1575 \u1606 \u1610  (As-Is):\
-                </h3>\
-                <div id="image_gallery" class="grid grid-cols-2 gap-2">\
-                    </div>\
-            </div>\
-\
-            <div class="border-t-2 border-slate-100 pt-6 grid grid-cols-2 gap-6 text-[9px] leading-relaxed">\
-                <div>\
-                    <p class="font-black text-slate-800 mb-1 underline">\uc0\u1578 \u1593 \u1604 \u1610 \u1605 \u1575 \u1578  \u1575 \u1604 \u1587 \u1583 \u1575 \u1583 :</p>\
-                    <p>\uc0\u1610 \u1585 \u1580 \u1609  \u1575 \u1604 \u1578 \u1581 \u1608 \u1610 \u1604  \u1601 \u1608 \u1585 \u1575 \u1611  \u1604 \u1590 \u1605 \u1575 \u1606  \u1581 \u1580 \u1586  \u1575 \u1604 \u1602 \u1591 \u1593 \u1577  \u1605 \u1606  \u1575 \u1604 \u1605 \u1589 \u1583 \u1585 .</p>\
-                    <p class="font-bold mt-1">\uc0\u1575 \u1604 \u1576 \u1606 \u1603 : \u1605 \u1589 \u1585 \u1601  \u1575 \u1604 \u1585 \u1575 \u1580 \u1581 \u1610 </p>\
-                    <p class="font-bold">\uc0\u1575 \u1604 \u1570 \u1610 \u1576 \u1575 \u1606 : SA0000000000000000000000</p>\
-                </div>\
-                <div class="text-slate-500 italic bg-slate-50 p-2 rounded">\
-                    <strong>\uc0\u1573 \u1582 \u1604 \u1575 \u1569  \u1605 \u1587 \u1572 \u1608 \u1604 \u1610 \u1577 :</strong> \u1606 \u1581 \u1606  \u1608 \u1587 \u1610 \u1591  \u1601 \u1581 \u1589  \u1608 \u1578 \u1571 \u1605 \u1610 \u1606 . \u1575 \u1604 \u1576 \u1610 \u1593  \u1610 \u1578 \u1605  \u1593 \u1604 \u1609  \u1581 \u1575 \u1604 \u1577  \u1575 \u1604 \u1602 \u1591 \u1593 \u1577  \u1575 \u1604 \u1585 \u1575 \u1607 \u1606 \u1577 . \u1604 \u1575  \u1610 \u1608 \u1580 \u1583  \u1590 \u1605 \u1575 \u1606  \u1605 \u1610 \u1603 \u1575 \u1606 \u1610 \u1603 \u1610  \u1571 \u1608  \u1603 \u1607 \u1585 \u1576 \u1575 \u1574 \u1610 . \u1575 \u1604 \u1578 \u1581 \u1608 \u1610 \u1604  \u1610 \u1593 \u1578 \u1576 \u1585  \u1605 \u1608 \u1575 \u1601 \u1602 \u1577  \u1593 \u1604 \u1609  \u1575 \u1604 \u1605 \u1593 \u1575 \u1610 \u1606 \u1577  \u1575 \u1604 \u1605 \u1585 \u1601 \u1602 \u1577 .\
-                </div>\
-            </div>\
-        </div>\
-    </div>\
-\
-    <script>\
-        document.getElementById('out_date').innerText = new Date().toLocaleDateString('ar-SA');\
-\
-        function update() \{\
-            document.getElementById('out_name').innerText = document.getElementById('in_name').value || '........';\
-            document.getElementById('out_car').innerText = document.getElementById('in_car').value || '........';\
-            document.getElementById('out_part').innerText = document.getElementById('in_part').value || '........';\
-            document.getElementById('out_price').innerText = Number(document.getElementById('in_price').value).toLocaleString('ar-SA');\
-        \}\
-\
-        function previewImages(event) \{\
-            const gallery = document.getElementById('image_gallery');\
-            gallery.innerHTML = '';\
-            const files = event.target.files;\
-            for (let i = 0; i < files.length; i++) \{\
-                const reader = new FileReader();\
-                reader.onload = function(e) \{\
-                    const img = document.createElement('img');\
-                    img.src = e.target.result;\
-                    img.className = "w-full h-32 object-cover rounded-lg";\
-                    gallery.appendChild(img);\
-                \}\
-                reader.readAsDataURL(files[i]);\
-            \}\
-        \}\
-\
-        function downloadPDF() \{\
-            const element = document.getElementById('quote-content');\
-            const opt = \{\
-                margin: 0,\
-                filename: `AutoMandoub_Quote_$\{document.getElementById('in_name').value\}.pdf`,\
-                image: \{ type: 'jpeg', quality: 0.98 \},\
-                html2canvas: \{ scale: 2, useCORS: true \},\
-                jsPDF: \{ unit: 'in', format: 'letter', orientation: 'portrait' \}\
-            \};\
-            html2pdf().set(opt).from(element).save();\
-        \}\
-    </script>\
-</body>\
-</html>}
+    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row gap-6">
+        
+        <div class="lg:w-1/3 bg-white p-6 rounded-2xl shadow-2xl no-print">
+            <h2 class="text-xl font-black mb-4 text-slate-800 underline decoration-blue-500">بيانات العرض</h2>
+            
+            <div class="space-y-4">
+                <input type="text" id="in_name" oninput="update()" placeholder="اسم العميل" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none text-right">
+                <input type="text" id="in_car" oninput="update()" placeholder="السيارة (مثال: كامري 2022)" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none text-right">
+                <input type="text" id="in_part" oninput="update()" placeholder="القطعة المطلوبة" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none text-right">
+                <input type="number" id="in_price" oninput="update()" placeholder="السعر الإجمالي (SAR)" class="w-full border-2 border-slate-100 p-3 rounded-xl focus:border-blue-500 outline-none text-right">
+                
+                <div class="p-3 bg-blue-50 rounded-xl">
+                    <label class="block text-xs font-bold text-blue-600 mb-2">صور الفحص الميداني</label>
+                    <input type="file" id="in_images" multiple accept="image/*" onchange="previewImages(event)" class="w-full text-xs">
+                </div>
+                
+                <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-4 rounded-xl font-black text-lg shadow-lg hover:bg-blue-700 active:scale-95 transition">
+                    تحميل العرض وارساله ✅
+                </button>
+            </div>
+        </div>
+
+        <div id="quote-content" class="lg:w-2/3 bg-white p-8 shadow-2xl relative overflow-hidden min-h-[800px]">
+            <div class="flex justify-between items-center border-b-8 border-slate-900 pb-6 mb-8">
+                <div>
+                    <h1 class="text-3xl font-[900] text-slate-900 tracking-tighter">AUTO MANDOUB</h1>
+                    <p class="text-sm font-bold text-blue-600">أوتو مندوب لخدمات فحص وتأمين قطع الغيار</p>
+                </div>
+                <div class="text-left text-[10px] font-bold text-slate-400">
+                    <p>التاريخ: <span id="out_date"></span></p>
+                    <p class="text-red-500">صلاحية العرض: 60 دقيقة</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="border-r-4 border-slate-100 pr-4">
+                    <span class="text-[10px] text-slate-400 font-bold block">العميل</span>
+                    <p class="font-bold text-slate-800 text-lg" id="out_name">........</p>
+                    <span class="text-[10px] text-slate-400 font-bold block mt-2">السيارة</span>
+                    <p class="font-bold text-slate-800" id="out_car">........</p>
+                </div>
+                <div class="bg-slate-900 p-4 rounded-xl text-white">
+                    <span class="text-[10px] text-slate-400 font-bold block">المبلغ المطلوب</span>
+                    <p class="text-2xl font-black"><span id="out_price">0</span> <span class="text-xs">SAR</span></p>
+                    <p class="text-[10px] mt-1 text-slate-300">القطعة: <span id="out_part">........</span></p>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-sm font-black mb-4 flex items-center gap-2 text-slate-800">
+                    <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                    نتائج المعاينة والفحص الميداني (As-Is):
+                </h3>
+                <div id="image_gallery" class="grid grid-cols-2 gap-2"></div>
+            </div>
+
+            <div class="border-t-2 border-slate-100 pt-6 grid grid-cols-2 gap-6 text-[10px] leading-relaxed">
+                <div>
+                    <p class="font-black text-slate-800 mb-1 underline">تعليمات السداد:</p>
+                    <p>يرجى التحويل فوراً لضمان حجز القطعة من المصدر.</p>
+                    <p class="font-bold mt-1">البنك: مصرف الراجحي</p>
+                    <p class="font-bold">الآيبان: SA0000000000000000000000</p>
+                </div>
+                <div class="text-slate-500 italic bg-slate-50 p-2 rounded">
+                    <strong>إخلاء مسؤولية:</strong> نحن وسيط فحص وتأمين. البيع يتم على حالة القطعة الراهنة. لا يوجد ضمان ميكانيكي أو كهربائي. التحويل يعتبر موافقة على المعاينة المرفقة.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('out_date').innerText = new Date().toLocaleDateString('ar-SA');
+
+        function update() {
+            document.getElementById('out_name').innerText = document.getElementById('in_name').value || '........';
+            document.getElementById('out_car').innerText = document.getElementById('in_car').value || '........';
+            document.getElementById('out_part').innerText = document.getElementById('in_part').value || '........';
+            document.getElementById('out_price').innerText = Number(document.getElementById('in_price').value).toLocaleString('ar-SA');
+        }
+
+        function previewImages(event) {
+            const gallery = document.getElementById('image_gallery');
+            gallery.innerHTML = '';
+            const files = event.target.files;
+            for (let i = 0; i < files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = "w-full h-40 object-cover rounded-lg border";
+                    gallery.appendChild(img);
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('quote-content');
+            const name = document.getElementById('in_name').value || 'Customer';
+            const opt = {
+                margin: 0.2,
+                filename: `AutoMandoub_Quote_${name}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>
