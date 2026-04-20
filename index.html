@@ -11,12 +11,14 @@
         body { font-family: 'Noto Sans Arabic', sans-serif; }
         .pdf-page { width: 800px; min-height: 1120px; padding: 60px; background: white; margin: 0 auto; position: relative; }
         @media print { .no-print { display: none; } }
+        
+        /* Updated Saudi-Style Stamp */
         .official-stamp {
-            border: 5px double #1e40af; border-radius: 50%; color: #1e40af; width: 115px; height: 115px;
+            border: 4px double #1e40af; border-radius: 50%; color: #1e40af; width: 130px; height: 130px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-weight: 900; opacity: 0.5; transform: rotate(-15deg); 
+            font-weight: 700; opacity: 0.5; transform: rotate(-12deg); 
             position: absolute; z-index: 50; background: rgba(255, 255, 255, 0.8); pointer-events: none;
-            top: -20px; right: 280px; 
+            top: -30px; right: 280px; text-align: center; line-height: 1.2;
         }
         .en-mode { direction: ltr !important; text-align: left !important; }
         .en-mode .official-stamp { right: auto; left: 280px; }
@@ -40,7 +42,7 @@
                     <input type="text" id="in_iban" oninput="validateIBAN(this)" placeholder="22 Digits Only" class="w-full border p-3 pl-10 rounded-xl outline-none font-mono">
                 </div>
 
-                <input type="text" id="in_pay_link" oninput="update()" placeholder="Payment Link (Optional)" class="w-full border p-3 rounded-xl outline-none text-blue-600 underline">
+                <input type="text" id="in_pay_link" oninput="update()" placeholder="Apple Pay / Mada Link (Optional)" class="w-full border p-3 rounded-xl outline-none text-blue-600 underline">
                 
                 <div id="items_inputs" class="space-y-4 mt-4">
                     <div class="p-4 border rounded-2xl bg-slate-50 space-y-2 item-row">
@@ -60,16 +62,16 @@
 
         <div id="quote-content" class="pdf-page shadow-2xl flex flex-col">
             <div class="flex justify-between items-start border-b-8 border-slate-900 pb-10 mb-10">
+                <div class="flex flex-col items-center">
+                    <img src="https://i.postimg.cc/2S9CzX5H/image.png" alt="Auto Mandoub" class="h-44 object-contain">
+                    <p class="text-xl font-black text-slate-800 mt-2 italic uppercase" id="lbl_quote_title">عرض سعر</p>
+                </div>
                 <div class="text-left text-[11px] font-bold text-slate-400 space-y-1 pt-24">
                     <p><span id="lbl_g">التاريخ ميلادي</span>: <span id="date_g"></span></p>
                     <p><span id="lbl_h">التاريخ هجري</span>: <span id="date_h"></span></p>
                     <p class="text-slate-500 font-mono">CR: 1010123456 | VAT: 300123456780003</p>
                     <p class="font-mono">Ma'aroof: 123456</p>
                     <p class="text-red-600 font-black italic" id="lbl_val">صلاحية العرض: 60 دقيقة فقط</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <img src="https://i.postimg.cc/2S9CzX5H/image.png" alt="Auto Mandoub" class="h-44 object-contain">
-                    <p class="text-xl font-black text-slate-800 mt-2 italic uppercase" id="lbl_quote_title">عرض سعر</p>
                 </div>
             </div>
 
@@ -104,10 +106,10 @@
                 
                 <div class="flex justify-end mt-12 relative">
                     <div class="official-stamp">
-                        <span class="text-[8px]">AUTO MANDOUB</span>
-                        <span class="text-[12px] font-black">أوتو مندوب</span>
-                        <span class="text-[14px]">موافق</span>
-                        <span class="text-[8px]">APPROVED</span>
+                        <span class="text-[9px] mb-1">AUTO MANDOUB</span>
+                        <span class="text-[12px] font-black border-b border-blue-200 pb-1 mb-1">أوتو مندوب</span>
+                        <span class="text-[8px] font-mono">CR: 1010123456</span>
+                        <span class="text-[8px] font-mono">VAT: 300123456780003</span>
                     </div>
 
                     <div class="w-72 space-y-3 bg-slate-50 p-6 rounded-3xl border border-slate-100 text-[11px] font-bold text-slate-500">
@@ -124,11 +126,11 @@
             <div class="grid grid-cols-2 gap-8 mt-auto pt-8 border-t-4 border-slate-100">
                 <div class="bg-blue-50 p-5 rounded-3xl border border-blue-100 text-[10px]">
                     <h4 class="font-black mb-2 underline" id="lbl_pay_title">Payment & Shipping:</h4>
-                    <p class="font-bold text-blue-900 text-[11px] mb-1"><span id="out_bank">Bank Name</span></p>
+                    <p class="font-black text-blue-900 text-[12px] mb-1"><span id="out_bank">Commercial Bank</span></p>
                     <p class="text-blue-800 font-mono mb-2">IBAN: <span id="out_iban">SA........</span></p>
-                    <div id="pay_link_section" class="hidden border-t pt-2 mt-1">
-                        <p class="font-bold mb-1">Pay with Apple Pay / Mada:</p>
-                        <a href="#" id="out_pay_link" class="text-blue-600 underline font-bold break-all">Click here to pay online</a>
+                    <div id="pay_link_section" class="hidden border-t border-blue-200 pt-2 mt-1">
+                        <p class="font-bold mb-1 text-slate-700">Digital Payment Link:</p>
+                        <a href="#" id="out_pay_link" class="text-blue-600 underline font-black break-all">Apple Pay / Mada Secure Link</a>
                     </div>
                     <p class="text-red-600 font-black italic mt-3" id="lbl_ship_note">* Shipping at delivery | Send transfer screenshot.</p>
                 </div>
