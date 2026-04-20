@@ -3,91 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Mandoub - Multi-Language Quote</title>
+    <title>Auto Mandoub - Official Quote</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
         body { font-family: 'Noto Sans Arabic', sans-serif; }
-        .quote-container { width: 800px; min-height: 1120px; padding: 40px; background: white; margin: 0 auto; position: relative; }
+        .pdf-page { width: 800px; min-height: 1120px; padding: 50px; background: white; margin: 0 auto; position: relative; }
         @media print { .no-print { display: none; } }
+        
+        /* Stamp Positioned Next to Total Box */
         .official-stamp {
-            border: 4px double #1e40af; border-radius: 50%; color: #1e40af; width: 110px; height: 110px;
+            border: 5px double #1e40af; border-radius: 50%; color: #1e40af; width: 110px; height: 110px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-weight: 900; opacity: 0.6; transform: rotate(-12deg); position: absolute; bottom: 30px; right: 40px;
+            font-weight: 900; opacity: 0.5; transform: rotate(-15deg); 
+            position: absolute; top: -20px; right: -30px; 
+            z-index: 50; background: rgba(255, 255, 255, 0.9); pointer-events: none;
         }
-        .en-mode { direction: ltr !important; text-align: left !important; font-family: sans-serif; }
-        .en-mode .official-stamp { right: auto; left: 40px; }
+        .en-mode { direction: ltr !important; text-align: left !important; }
+        .en-mode .official-stamp { right: auto; left: -30px; }
     </style>
 </head>
 <body class="bg-slate-200 lg:p-10 p-2">
 
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6">
-        <div class="lg:w-1/3 bg-white p-6 rounded-3xl shadow-xl no-print">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
+        <div class="lg:w-1/3 bg-white p-6 rounded-3xl shadow-xl no-print h-fit sticky top-10 border-t-8 border-blue-600">
             <h2 class="text-xl font-black mb-6 border-b pb-2">Control Panel</h2>
             <div class="space-y-4">
-                <div class="flex gap-4 p-2 bg-slate-100 rounded-xl">
-                    <button onclick="setLang('ar')" class="flex-1 py-2 bg-blue-600 text-white rounded-lg font-bold">Arabic</button>
+                <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
+                    <button onclick="setLang('ar')" class="flex-1 py-2 bg-blue-600 text-white rounded-lg font-bold">عربي</button>
                     <button onclick="setLang('en')" class="flex-1 py-2 bg-slate-400 text-white rounded-lg font-bold">English</button>
                 </div>
-                <input type="text" id="in_name" oninput="update()" placeholder="Client Name" class="w-full border p-3 rounded-xl">
-                <input type="text" id="in_car" oninput="update()" placeholder="Car Model" class="w-full border p-3 rounded-xl">
-                <input type="text" id="in_iban" oninput="update()" placeholder="IBAN" class="w-full border p-3 rounded-xl text-left">
+                <input type="text" id="in_name" oninput="update()" placeholder="Client Name" class="w-full border p-3 rounded-xl outline-none">
+                <input type="text" id="in_car" oninput="update()" placeholder="Car Model & Year" class="w-full border p-3 rounded-xl outline-none">
+                <input type="text" id="in_iban" oninput="update()" placeholder="Enter IBAN Manually" class="w-full border p-3 rounded-xl outline-none text-left">
                 
-                <div class="border-t pt-4">
-                    <div id="items_inputs" class="space-y-4">
-                        <div class="p-3 border rounded-xl bg-slate-50 space-y-2 item-row">
-                            <input type="text" placeholder="Part Name" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()">
-                            <div class="flex gap-2">
-                                <input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()">
-                                <input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()">
-                            </div>
-                            <textarea placeholder="Notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>
+                <div id="items_inputs" class="space-y-4 mt-4">
+                    <div class="p-4 border rounded-2xl bg-slate-50 space-y-2 item-row">
+                        <input type="text" placeholder="Part Description" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()">
+                        <div class="flex gap-2">
+                            <input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()">
+                            <input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()">
                         </div>
+                        <textarea placeholder="Condition notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>
                     </div>
-                    <button onclick="addRow()" class="mt-3 text-xs text-blue-600 font-bold underline">+ Add Part</button>
                 </div>
-                
-                <input type="file" id="in_images" multiple accept="image/*" onchange="previewImages(event)" class="w-full text-xs p-4 border-2 border-dashed rounded-xl">
-                <button onclick="downloadPDF()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl">Generate PDF ✅</button>
+                <button onclick="addRow()" class="w-full py-2 text-blue-600 font-bold border-2 border-dashed border-blue-100 rounded-xl">+ Add Another Part</button>
+                <input type="file" id="in_images" multiple accept="image/*" onchange="previewImages(event)" class="w-full text-xs mt-4">
+                <button onclick="downloadPDF()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg">Generate PDF ✅</button>
             </div>
         </div>
 
-        <div id="quote-content" class="quote-container shadow-2xl flex flex-col">
-            <div class="flex justify-between items-start border-b-4 border-slate-900 pb-6 mb-8">
-                <div class="flex flex-col">
-                    <img src="https://i.imgur.com/8QpYI0m.png" alt="Logo" class="h-20 mb-2 object-contain self-start">
-                    <h1 class="text-2xl font-black" id="lbl_brand">أوتو مندوب</h1>
-                    <p class="text-[10px] font-bold text-blue-600 uppercase tracking-widest" id="lbl_sub">SOURCING & INSPECTION SERVICES</p>
-                </div>
-                <div class="text-left text-[11px] font-bold text-slate-400 space-y-1 pt-2">
+        <div id="quote-content" class="pdf-page shadow-2xl flex flex-col">
+            <div class="flex justify-between items-start border-b-8 border-slate-900 pb-8 mb-8">
+                <img src="https://i.postimg.cc/2S9CzX5H/image.png" alt="Auto Mandoub Logo" class="h-32 object-contain">
+                <div class="text-left text-[11px] font-bold text-slate-400 space-y-1 pt-4">
                     <p><span id="lbl_g">التاريخ ميلادي</span>: <span id="date_g"></span></p>
                     <p><span id="lbl_h">التاريخ هجري</span>: <span id="date_h"></span></p>
-                    <p>CR: 1234567890 | VAT: 3000000000 | Ma'aroof: 99999</p>
+                    <p class="text-slate-500 font-mono">CR: 1010123456 | VAT: 300123456780003</p>
+                    <p class="font-mono">Ma'aroof: 123456</p>
                     <p class="text-red-500 font-black italic" id="lbl_val">صلاحية العرض: 60 دقيقة فقط</p>
                 </div>
             </div>
 
-            <div class="bg-slate-50 p-6 rounded-2xl mb-10 flex justify-between">
-                <div>
-                    <span class="text-[10px] text-slate-400 font-bold block mb-1" id="lbl_client">العميل المحترم:</span>
-                    <p class="font-black text-xl" id="out_name">........</p>
+            <div class="grid grid-cols-2 gap-8 mb-10">
+                <div class="border-r-8 border-blue-600 pr-5">
+                    <span class="text-[10px] text-slate-400 font-bold block mb-1 uppercase" id="lbl_client">العميل المحترم:</span>
+                    <p class="font-black text-2xl text-slate-900" id="out_name">........</p>
+                    <span class="text-[10px] text-slate-400 font-bold block mt-4 mb-1 uppercase" id="lbl_car">السيارة والموديل:</span>
+                    <p class="font-bold text-lg text-slate-700" id="out_car">........</p>
                 </div>
-                <div class="text-left">
-                    <span class="text-[10px] text-slate-400 font-bold block mb-1" id="lbl_car">السيارة:</span>
-                    <p class="font-bold text-lg" id="out_car">........</p>
+                
+                <div class="bg-slate-900 text-white p-6 rounded-[40px] flex flex-col justify-center items-center relative shadow-inner">
+                    <span class="text-xs font-bold text-slate-400 mb-1" id="lbl_top_total">المبلغ الإجمالي</span>
+                    <p class="text-5xl font-black tracking-tighter"><span id="total_all_top">0.00</span> <span class="text-xs">SAR</span></p>
+                    
+                    <div class="official-stamp">
+                        <span class="text-[8px]">AUTO MANDOUB</span>
+                        <span class="text-[12px] font-black">أوتو مندوب</span>
+                        <span class="text-[14px]">موافق</span>
+                        <span class="text-[8px]">APPROVED</span>
+                    </div>
                 </div>
             </div>
 
             <div class="mb-10">
-                <h3 class="text-sm font-black mb-5 border-r-4 border-blue-600 pr-3" id="lbl_results">نتائج المعاينة (على حالتها الراهنة):</h3>
+                <h3 class="text-sm font-black mb-5 border-r-4 border-blue-600 pr-3" id="lbl_results">نتائج المعاينة الميدانية:</h3>
                 <div id="image_gallery" class="grid grid-cols-2 gap-4"></div>
             </div>
 
-            <div class="grow mb-10">
+            <div class="grow mb-12">
                 <table class="w-full text-right">
                     <thead>
-                        <tr class="bg-slate-900 text-white text-[10px] uppercase font-black">
+                        <tr class="bg-slate-50 text-slate-900 text-[11px] font-black border-b-4 border-slate-900 uppercase">
                             <th class="p-4" id="lbl_th_part">القطعة</th>
                             <th class="p-4 text-center" id="lbl_th_qty">الكمية</th>
                             <th class="p-4 text-center" id="lbl_th_price">السعر</th>
@@ -96,42 +104,25 @@
                     </thead>
                     <tbody id="items_table" class="text-xs"></tbody>
                 </table>
-
-                <div class="flex justify-end mt-6">
-                    <div class="w-64 space-y-2 border-t-2 pt-4 text-[11px] font-bold">
-                        <div class="flex justify-between">
-                            <span id="lbl_subtotal">المجموع الفرعي:</span>
-                            <span id="sub_total">0.00</span>
-                        </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span id="lbl_vat">الضريبة (15%):</span>
-                            <span id="vat_amount">0.00</span>
-                        </div>
-                        <div class="flex justify-between text-xl font-black text-blue-700">
-                            <span id="lbl_final">الإجمالي:</span>
-                            <span><span id="total_all_final">0.00</span> SAR</span>
-                        </div>
+                <div class="flex justify-end mt-8">
+                    <div class="w-72 space-y-3 bg-slate-50 p-6 rounded-3xl border border-slate-100 text-[11px] font-bold text-slate-500">
+                        <div class="flex justify-between"><span id="lbl_subtotal">المجموع الفرعي:</span><span id="sub_total">0.00</span></div>
+                        <div class="flex justify-between border-b pb-2"><span id="lbl_vat">الضريبة (15%):</span><span id="vat_amount">0.00</span></div>
+                        <div class="flex justify-between text-2xl font-black text-blue-700 pt-1"><span id="lbl_final">الإجمالي:</span><span><span id="total_all_final">0.00</span> SAR</span></div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-8 pt-8 border-t-2">
-                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 text-[10px]">
-                    <h4 class="font-black mb-2 underline" id="lbl_pay_title">تعليمات السداد والشحن:</h4>
-                    <p class="mb-2 font-bold text-blue-900">IBAN: <span id="out_iban">........</span></p>
-                    <p class="text-red-600 font-bold" id="lbl_ship_note">* تكلفة الشحن عند الاستلام | ارسل صورة التحويل فوراً.</p>
+            <div class="grid grid-cols-2 gap-8 mt-auto pt-8 border-t-4 border-slate-100">
+                <div class="bg-blue-50 p-5 rounded-3xl border border-blue-100 text-[10px]">
+                    <h4 class="font-black mb-3 underline" id="lbl_pay_title">تعليمات السداد والشحن:</h4>
+                    <p class="font-bold text-blue-900 text-xs mb-3 font-mono">IBAN: <span id="out_iban">........</span></p>
+                    <p class="text-red-600 font-black italic leading-relaxed" id="lbl_ship_note">* تكلفة الشحن عند الاستلام | ارسل صورة التحويل فوراً لتعميد الشراء.</p>
                 </div>
-                <div class="bg-slate-900 text-white p-4 rounded-2xl text-[9px] leading-relaxed relative">
-                    <h4 class="font-black mb-2 text-blue-400" id="lbl_terms_title">الشروط العامة:</h4>
-                    <ul id="terms_list" class="space-y-1 list-disc pr-3"></ul>
+                <div class="bg-slate-900 text-white p-5 rounded-3xl text-[9px] leading-relaxed shadow-lg">
+                    <h4 class="font-black mb-3 text-blue-400 uppercase" id="lbl_terms_title">General Terms:</h4>
+                    <ul id="terms_list" class="space-y-1 list-disc pr-4"></ul>
                 </div>
-            </div>
-
-            <div class="official-stamp">
-                <span class="text-[8px]">AUTO MANDOUB</span>
-                <span class="text-[12px] font-black">أوتو مندوب</span>
-                <span class="text-[14px]">موافق</span>
-                <span class="text-[8px]">APPROVED</span>
             </div>
         </div>
     </div>
@@ -139,28 +130,28 @@
     <script>
         const translations = {
             ar: {
-                brand: "أوتو مندوب", sub: "لخدمات فحص وتأمين قطع الغيار", g: "التاريخ ميلادي", h: "التاريخ هجري", val: "صلاحية العرض: 60 دقيقة فقط",
+                g: "التاريخ ميلادي", h: "التاريخ هجري", val: "صلاحية العرض: 60 دقيقة فقط",
                 client: "العميل المحترم:", car: "السيارة والموديل:", results: "نتائج المعاينة الميدانية (حالة القطعة الراهنة):",
-                th_part: "القطعة", th_qty: "الكمية", th_price: "السعر", th_total: "الإجمالي", subtotal: "المجموع الفرعي:",
-                vat: "الضريبة (15%):", final: "الإجمالي النهائي:", pay_title: "تعليمات السداد والشحن:",
+                th_part: "القطعة", th_qty: "الكمية", th_price: "السعر قبل الضريبة", th_total: "الإجمالي", subtotal: "المجموع الفرعي:",
+                vat: "ضريبة القيمة المضافة (15%):", final: "الإجمالي النهائي:", pay_title: "تعليمات السداد والشحن:", top_total: "المبلغ الإجمالي",
                 ship_note: "* تكلفة الشحن عند الاستلام | ارسل صورة التحويل لتعميد الشراء.", terms_title: "الشروط والأحكام:",
                 terms: [
                     "البيع يتم على حالة القطعة الراهنة وقت الفحص بصرياً.",
-                    "لا يوجد ضمان أو إرجاع على القطع المستعملة (بما في ذلك الكهربائية).",
-                    "التحويل البنكي يعتبر موافقة نهائية على نتائج المعاينة.",
+                    "لا يوجد ضمان أو إرجاع على أي قطع مستعملة نهائياً.",
+                    "التحويل البنكي يعتبر موافقة نهائية من العميل على المعاينة.",
                     "بمجرد الشراء والشحن، تعتبر العملية منتهية وغير قابلة للاسترداد."
                 ]
             },
             en: {
-                brand: "AUTO MANDOUB", sub: "Sourcing & Inspection Services", g: "Date (G)", h: "Date (H)", val: "Validity: 60 Minutes Only",
-                client: "Dear Client:", car: "Car Model:", results: "Inspection Results (As-is Condition):",
-                th_part: "Part Name", th_qty: "QTY", th_price: "Price", th_total: "Total", subtotal: "Sub-total:",
-                vat: "VAT (15%):", final: "Grand Total:", pay_title: "Payment & Shipping:",
+                g: "G Date", h: "H Date", val: "Validity: 60 Minutes Only",
+                client: "Dear Client:", car: "Vehicle Details:", results: "Inspection Results (Visual Status):",
+                th_part: "Part Description", th_qty: "QTY", th_price: "Price (Excl. VAT)", th_total: "Total", subtotal: "Sub-total:",
+                vat: "VAT (15%):", final: "Grand Total:", pay_title: "Payment & Shipping:", top_total: "Total Due",
                 ship_note: "* Shipping cost paid at delivery | Send transfer screenshot to proceed.", terms_title: "General Terms:",
                 terms: [
-                    "Parts sold based on visual status at time of check.",
-                    "No warranty or returns on any used parts (including electrical).",
-                    "Bank transfer implies final approval of inspection.",
+                    "Parts sold as-is based on visual status at time of check.",
+                    "No warranty or returns on used parts (strictly final).",
+                    "Bank transfer implies final approval of inspection photos.",
                     "Transactions are final once the part is purchased and shipped."
                 ]
             }
@@ -172,10 +163,7 @@
             const container = document.getElementById('quote-content');
             lang === 'en' ? container.classList.add('en-mode') : container.classList.remove('en-mode');
             container.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            
             const t = translations[lang];
-            document.getElementById('lbl_brand').innerText = t.brand;
-            document.getElementById('lbl_sub').innerText = t.sub;
             document.getElementById('lbl_g').innerText = t.g;
             document.getElementById('lbl_h').innerText = t.h;
             document.getElementById('lbl_val').innerText = t.val;
@@ -189,12 +177,11 @@
             document.getElementById('lbl_subtotal').innerText = t.subtotal;
             document.getElementById('lbl_vat').innerText = t.vat;
             document.getElementById('lbl_final').innerText = t.final;
+            document.getElementById('lbl_top_total').innerText = t.top_total;
             document.getElementById('lbl_pay_title').innerText = t.pay_title;
             document.getElementById('lbl_ship_note').innerText = t.ship_note;
             document.getElementById('lbl_terms_title').innerText = t.terms_title;
-            
-            const termsList = document.getElementById('terms_list');
-            termsList.innerHTML = t.terms.map(item => `<li>${item}</li>`).join('');
+            document.getElementById('terms_list').innerHTML = t.terms.map(item => `<li>${item}</li>`).join('');
             update();
         }
 
@@ -202,7 +189,6 @@
             document.getElementById('out_name').innerText = document.getElementById('in_name').value || '........';
             document.getElementById('out_car').innerText = document.getElementById('in_car').value || '........';
             document.getElementById('out_iban').innerText = document.getElementById('in_iban').value || '........';
-            
             const rows = document.querySelectorAll('.item-row');
             let tableHTML = ''; let subtotal = 0;
             rows.forEach(row => {
@@ -211,20 +197,21 @@
                 const qty = parseInt(row.querySelector('.in-qty').value) || 0;
                 const notes = row.querySelector('.in-notes').value;
                 const total = price * qty; subtotal += total;
-                tableHTML += `<tr class="border-b font-bold"><td class="p-4">${name}${notes ? `<br><span class="text-[9px] font-normal italic">Note: ${notes}</span>` : ''}</td><td class="p-4 text-center">${qty}</td><td class="p-4 text-center">${price.toFixed(2)}</td><td class="p-4 text-center text-blue-700">${total.toFixed(2)}</td></tr>`;
+                tableHTML += `<tr class="border-b font-bold"><td class="p-4 text-slate-800"><span class="block text-lg">${name}</span>${notes ? `<span class="text-[9px] font-normal italic opacity-60">Note: ${notes}</span>` : ''}</td><td class="p-4 text-center text-slate-400">${qty}</td><td class="p-4 text-center font-mono">${price.toFixed(2)}</td><td class="p-4 text-center text-blue-700 font-mono">${total.toFixed(2)}</td></tr>`;
             });
             const vat = subtotal * 0.15;
             const totalFinal = subtotal + vat;
             document.getElementById('items_table').innerHTML = tableHTML;
             document.getElementById('sub_total').innerText = subtotal.toFixed(2);
             document.getElementById('vat_amount').innerText = vat.toFixed(2);
+            document.getElementById('total_all_top').innerText = totalFinal.toFixed(2);
             document.getElementById('total_all_final').innerText = totalFinal.toFixed(2);
         }
 
         function addRow() {
             const div = document.createElement('div');
-            div.className = "p-3 border rounded-xl bg-slate-50 space-y-2 item-row";
-            div.innerHTML = `<input type="text" placeholder="Part Name" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()"><div class="flex gap-2"><input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()"><input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()"></div><textarea placeholder="Notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>`;
+            div.className = "p-4 border rounded-2xl bg-slate-50 space-y-2 item-row";
+            div.innerHTML = `<input type="text" placeholder="Part Name" class="w-full border p-2 rounded-lg text-sm in-part" oninput="update()"><div class="flex gap-2"><input type="number" placeholder="Price" class="w-1/2 border p-2 rounded-lg text-sm in-price" oninput="update()"><input type="number" placeholder="Qty" class="w-1/2 border p-2 rounded-lg text-sm in-qty" value="1" oninput="update()"></div><textarea placeholder="Condition notes..." class="w-full border p-2 rounded-lg text-xs in-notes" oninput="update()"></textarea>`;
             document.getElementById('items_inputs').appendChild(div);
         }
 
@@ -233,7 +220,7 @@
             Array.from(e.target.files).forEach(f => {
                 const r = new FileReader(); r.onload = (ev) => {
                     const img = document.createElement('img'); img.src = ev.target.result;
-                    img.className = "w-full h-44 object-cover rounded-2xl border-2"; gallery.appendChild(img);
+                    img.className = "w-full h-44 object-cover rounded-3xl border-4 border-white shadow-md"; gallery.appendChild(img);
                 }; r.readAsDataURL(f);
             });
         }
@@ -245,7 +232,6 @@
             html2pdf().set(opt).from(element).save();
         }
 
-        // Initialize
         const optG = { year: 'numeric', month: 'long', day: 'numeric' };
         const optH = { year: 'numeric', month: 'long', day: 'numeric', calendar: 'islamic-uma' };
         document.getElementById('date_g').innerText = new Intl.DateTimeFormat('ar-SA', optG).format(new Date());
